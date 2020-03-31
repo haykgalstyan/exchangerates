@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:gravity="center_vertical"
+	android:orientation="horizontal"
+	android:padding="16dp"
+	android:weightSum="100">
+
+	<ImageView
+		android:id="@+id/item_rate_image"
+		android:layout_width="48dp"
+		android:layout_height="48dp"
+		tools:background="@color/colorPrimary"
+		tools:ignore="ContentDescription" />
+
+	<Space
+		android:layout_width="16dp"
+		android:layout_height="0dp" />
+
+	<TextView
+		android:id="@+id/item_rate_text_title"
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:layout_weight="50"
+		android:ellipsize="end"
+		android:maxLines="1"
+		tools:text="Some long long long bank name" />
+
+	<TextView
+		android:id="@+id/item_rate_text_rate_buy"
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:layout_weight="25"
+		android:textAlignment="viewEnd"
+		tools:text="123456" />
+
+	<TextView
+		android:id="@+id/item_rate_text_rate_sell"
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:layout_weight="25"
+		android:textAlignment="viewEnd"
+		tools:text="123456" />
+
+</LinearLayout>

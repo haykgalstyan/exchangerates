@@ -15,10 +15,16 @@ class App : Application() {
      *
      * Rates
      * http://rate.am/ws/mobile/v2/rates.ashx?lang=en
+     * Logos
+     * https://rate.am/images/organization/logo/
      *
      * Branches
      * http://rate.am/ws/mobile/v2/branches.ashx?id=5ee70183-87fe-4799-802e-ef7f5e7323db
      * Maybe put org id in gradle local props and mention that in readme file
+     *
+     *
+     * 0 cash
+     * 1 non cache
      */
 
 
