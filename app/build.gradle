@@ -1,6 +1,8 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlinx-serialization'
+
 
 android {
     compileSdkVersion 29
@@ -53,4 +55,7 @@ dependencies {
     def versionLifecycle = '2.2.0'
     implementation "androidx.lifecycle:lifecycle-extensions:$versionLifecycle"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$versionLifecycle"
+
+    // Serialization
+    implementation "org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.20.0"
 }
