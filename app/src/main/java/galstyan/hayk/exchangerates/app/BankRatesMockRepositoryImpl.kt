@@ -4,39 +4,45 @@ import galstyan.hayk.exchangerates.model.Bank
 import galstyan.hayk.exchangerates.model.CurrencyRate
 import galstyan.hayk.exchangerates.model.Rate
 import galstyan.hayk.exchangerates.model.RateInfo
-import galstyan.hayk.exchangerates.repository.RatesRepository
+import galstyan.hayk.exchangerates.repository.BankRatesRepository
+import kotlin.random.Random
 
 
-class RatesMockRepositoryImpl : RatesRepository() {
+class BankRatesMockRepositoryImpl : BankRatesRepository() {
 
-    override suspend fun getRates(): List<Bank> {
+
+    override suspend fun getBankRates(): List<Bank> {
+        val r = Random(System.currentTimeMillis())
+        var i = 0
+
         val list: MutableList<Bank> = mutableListOf()
         repeat(10) {
+            i++
             list.add(
                 Bank(
-                    id = it.toString(),
-                    title = "Bank $it",
+                    id = i.toString(),
+                    title = "Bank $i",
                     image = "247e6cb5ede645579a2a6dba26dc6200.jpg",
                     branches = null,
                     rateInfo = RateInfo(
                         date = System.currentTimeMillis(),
-                        rates = listOf(
+                        currencyRates = listOf(
                             CurrencyRate(
-                                currency = "USD",
-                                cash = Rate(
-                                    buy = 1000.toDouble(),
-                                    sell = 2000.toDouble()
+                                currency = if (i % 2 == 2) "USD" else "AMD",
+                                rateCash = Rate(
+                                    buy = i * 10.toDouble(),
+                                    sell = i * 20.toDouble()
                                 ),
-                                nonCash = Rate(
+                                rateNonCash = Rate(
                                     buy = 500.toDouble(),
                                     sell = 700.toDouble()
                                 )
                             )
-                        )
+                        ).shuffled()
                     )
                 )
             )
         }
-        return list
+        return list.shuffled()
     }
 }

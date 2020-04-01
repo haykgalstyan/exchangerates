@@ -3,6 +3,7 @@ package galstyan.hayk.exchangerates.app
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import galstyan.hayk.exchangerates.R
+import galstyan.hayk.exchangerates.ui.RatesFragment
 
 
 class AppActivity : AppCompatActivity() {
@@ -17,6 +18,6 @@ class AppActivity : AppCompatActivity() {
             return
 
         val navigation = NavigationImpl(supportFragmentManager, R.id.fragment_container, null)
-//        navigation.replace(Fragment(app.viewModelFactory))
+        navigation.replace(RatesFragment(app.viewModelFactory))
     }
 }
