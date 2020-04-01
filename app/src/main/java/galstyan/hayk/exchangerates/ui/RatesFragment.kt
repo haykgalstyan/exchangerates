@@ -103,10 +103,10 @@ class RatesFragment(viewModelFactory: ViewModelProvider.Factory) :
     inner class BankRateHolder(
         itemView: View
     ) : BoundViewHolder(itemView) {
-        val title: TextView by lazy { itemView.findViewById<TextView>(R.id.item_rate_text_title) }
-        val buy: TextView by lazy { itemView.findViewById<TextView>(R.id.item_rate_text_rate_buy) }
-        val sell: TextView by lazy { itemView.findViewById<TextView>(R.id.item_rate_text_rate_sell) }
-        val image: ImageView by lazy { itemView.findViewById<ImageView>(R.id.item_rate_image) }
+        private val title: TextView by lazy { itemView.findViewById<TextView>(R.id.item_rate_text_title) }
+        private val buy: TextView by lazy { itemView.findViewById<TextView>(R.id.item_rate_text_rate_buy) }
+        private val sell: TextView by lazy { itemView.findViewById<TextView>(R.id.item_rate_text_rate_sell) }
+        private val image: ImageView by lazy { itemView.findViewById<ImageView>(R.id.item_rate_image) }
 
         override fun bind() {
             val bank = viewModel.bankRatesList[adapterPosition]
