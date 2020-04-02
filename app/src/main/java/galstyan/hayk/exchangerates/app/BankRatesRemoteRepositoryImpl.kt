@@ -3,7 +3,7 @@ package galstyan.hayk.exchangerates.app
 import android.annotation.SuppressLint
 import android.net.Uri
 import galstyan.hayk.exchangerates.model.Bank
-import galstyan.hayk.exchangerates.model.CurrencyRate
+import galstyan.hayk.exchangerates.model.Rates
 import galstyan.hayk.exchangerates.model.Rate
 import galstyan.hayk.exchangerates.model.RateInfo
 import galstyan.hayk.exchangerates.repository.BankRatesRepository
@@ -74,17 +74,14 @@ class BankRatesRemoteRepositoryImpl(
     }
 
 
-    private fun deserializeCurrencyRates(rateInfo: JSONObject): List<CurrencyRate> {
+    private fun deserializeCurrencyRates(rateInfo: JSONObject): Map<String, Rates> {
         val currencies = rateInfo.keys()
-        val result = mutableListOf<CurrencyRate>()
+        val result = mutableMapOf<String, Rates>()
         currencies.forEach { currency ->
             val rate = rateInfo.get(currency) as JSONObject
-            result.add(
-                CurrencyRate(
-                    currency = currency,
-                    rateCash = deserializeRate(rate, KEY_RATE_CASH),
-                    rateNonCash = deserializeRate(rate, KEY_RATE_NO_CASH)
-                )
+            result[currency] = Rates(
+                rateCash = deserializeRate(rate, KEY_RATE_CASH),
+                rateNonCash = deserializeRate(rate, KEY_RATE_NO_CASH)
             )
         }
         return result

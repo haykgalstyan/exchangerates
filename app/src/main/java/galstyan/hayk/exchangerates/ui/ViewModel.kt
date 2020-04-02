@@ -11,23 +11,39 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 
+/**
+ * Since the UI is showing Banks grouped by currencies, we need a map of
+ * currency -> Banks (Can retrieve rates from bank fast by currency key)
+ * View model shall expose data convenient for the view, so the mapping is done here
+ *
+ * backing fields are for encapsulating [MutableLiveData] or mutable variables
+ */
+
 class ViewModel(appContainer: AppContainer) : AppViewModel(appContainer) {
-
-    val bankRatesObservable: LiveData<List<Bank>> get() = _bankRatesObservable
-    private val _bankRatesObservable: MutableLiveData<List<Bank>> = MutableLiveData()
-
-
     private val repoBankRates = appContainer.getRepository(BankRatesRepository::class.java)
     private val repoBranches = appContainer.getRepository(BranchRepository::class.java)
 
-    val bankRatesList get() = _bankRatesList
-    private lateinit var _bankRatesList: List<Bank>
+    val currencyBanksMapObservable: LiveData<Map<String, List<Bank>>> get() = _currencyBanksMapObservable
+    private val _currencyBanksMapObservable: MutableLiveData<Map<String, List<Bank>>> =
+        MutableLiveData()
+
+    val currencyBanksMap get(): Map<String, List<Bank>> = _currencyBanksMap
+    private lateinit var _currencyBanksMap: Map<String, List<Bank>>
+
+    val currencies get(): List<String> = _currencies
+    private lateinit var _currencies: List<String>
 
 
     fun loadBanks() {
         viewModelScope.launch(Dispatchers.IO) {
-            _bankRatesList = repoBankRates.getBankRates()
-            _bankRatesObservable.postValue(bankRatesList)
+            val banks = repoBankRates.getBankRates()
+
+            _currencies = banks.flatMap { it.rateInfo.currencyRates.keys }.distinct()
+            _currencyBanksMap = _currencies.associateWith { currency ->
+                banks.filter { bank -> bank.rateInfo.currencyRates.contains(currency) }
+            }
+
+            _currencyBanksMapObservable.postValue(_currencyBanksMap)
         }
     }
 }

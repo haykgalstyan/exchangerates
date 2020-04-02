@@ -3,12 +3,11 @@ package galstyan.hayk.exchangerates.model
 
 data class RateInfo(
     val date: Long,
-    val currencyRates: List<CurrencyRate>
+    val currencyRates: Map<String, Rates>
 )
 
 
-data class CurrencyRate(
-    val currency: String,
+data class Rates(
     val rateCash: Rate?,
     val rateNonCash: Rate?
 )

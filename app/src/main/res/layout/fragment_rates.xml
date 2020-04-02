@@ -24,7 +24,6 @@
 			android:layout_height="match_parent"
 			tools:listitem="@layout/rate_list" />
 
-
 	</LinearLayout>
 
 

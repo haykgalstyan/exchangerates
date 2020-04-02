@@ -1,39 +1,21 @@
 package galstyan.hayk.exchangerates.ui
 
+import android.annotation.SuppressLint
 import androidx.recyclerview.widget.DiffUtil
 import galstyan.hayk.exchangerates.model.Bank
-import galstyan.hayk.exchangerates.model.CurrencyRate
+import galstyan.hayk.exchangerates.model.Rate
+import galstyan.hayk.exchangerates.model.Rates
 
 
-class RateDiffer : DiffUtil.ItemCallback<CurrencyRate>() {
-    override fun areItemsTheSame(
-        old: CurrencyRate,
-        new: CurrencyRate
-    ): Boolean {
-        return old == new
-    }
+fun bankDiffer(): DiffUtil.ItemCallback<Bank> = SimpleDiffer()
+fun rateDiffer(): DiffUtil.ItemCallback<Rates> = SimpleDiffer()
 
-    override fun areContentsTheSame(
-        old: CurrencyRate,
-        new: CurrencyRate
-    ): Boolean {
-        return true
-    }
-}
+fun stringDiffer(): DiffUtil.ItemCallback<String> = SimpleDiffer()
+fun Class<String>.differ(): DiffUtil.ItemCallback<String> = stringDiffer()
 
+open class SimpleDiffer<T> : DiffUtil.ItemCallback<T>() {
+    override fun areItemsTheSame(old: T, new: T): Boolean = old === new
 
-class BankDiffer : DiffUtil.ItemCallback<Bank>() {
-    override fun areItemsTheSame(
-        old: Bank,
-        new: Bank
-    ): Boolean {
-        return old.title == new.title
-    }
-
-    override fun areContentsTheSame(
-        old: Bank,
-        new: Bank
-    ): Boolean {
-        return old == new
-    }
+    @SuppressLint("DiffUtilEquals")
+    override fun areContentsTheSame(old: T, new: T): Boolean = old == new
 }
