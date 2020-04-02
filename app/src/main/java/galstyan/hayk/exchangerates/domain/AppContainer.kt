@@ -1,4 +1,4 @@
-package galstyan.hayk.exchangerates.model
+package galstyan.hayk.exchangerates.domain
 
 import galstyan.hayk.exchangerates.repository.Repository
 

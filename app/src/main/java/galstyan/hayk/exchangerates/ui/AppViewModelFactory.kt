@@ -2,7 +2,7 @@ package galstyan.hayk.exchangerates.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import galstyan.hayk.exchangerates.model.AppContainer
+import galstyan.hayk.exchangerates.domain.AppContainer
 
 
 class AppViewModelFactory(

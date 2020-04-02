@@ -1,15 +1,15 @@
 package galstyan.hayk.exchangerates.app
 
-import galstyan.hayk.exchangerates.model.Bank
-import galstyan.hayk.exchangerates.model.Branch
-import galstyan.hayk.exchangerates.model.Location
+import galstyan.hayk.exchangerates.domain.Branch
+import galstyan.hayk.exchangerates.domain.Language
+import galstyan.hayk.exchangerates.domain.Location
 import galstyan.hayk.exchangerates.repository.BranchRepository
 
 
 class BranchLocalRepositoryImpl : BranchRepository() {
 
 
-    override suspend fun getBranchesOf(bankId: String): List<Branch> {
+    override suspend fun getBranchesOf(bankId: String, language: Language): List<Branch> {
         val list: MutableList<Branch> = mutableListOf()
         repeat(10) {
             list.add(

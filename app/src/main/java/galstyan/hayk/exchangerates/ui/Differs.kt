@@ -2,9 +2,8 @@ package galstyan.hayk.exchangerates.ui
 
 import android.annotation.SuppressLint
 import androidx.recyclerview.widget.DiffUtil
-import galstyan.hayk.exchangerates.model.Bank
-import galstyan.hayk.exchangerates.model.Rate
-import galstyan.hayk.exchangerates.model.Rates
+import galstyan.hayk.exchangerates.domain.Bank
+import galstyan.hayk.exchangerates.domain.Rates
 
 
 fun bankDiffer(): DiffUtil.ItemCallback<Bank> = SimpleDiffer()

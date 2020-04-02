@@ -3,8 +3,9 @@ package galstyan.hayk.exchangerates.ui
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import galstyan.hayk.exchangerates.model.AppContainer
-import galstyan.hayk.exchangerates.model.Bank
+import galstyan.hayk.exchangerates.domain.AppContainer
+import galstyan.hayk.exchangerates.domain.Bank
+import galstyan.hayk.exchangerates.domain.Language
 import galstyan.hayk.exchangerates.repository.BranchRepository
 import galstyan.hayk.exchangerates.repository.BankRatesRepository
 import kotlinx.coroutines.Dispatchers
@@ -23,6 +24,8 @@ class ViewModel(appContainer: AppContainer) : AppViewModel(appContainer) {
     private val repoBankRates = appContainer.getRepository(BankRatesRepository::class.java)
     private val repoBranches = appContainer.getRepository(BranchRepository::class.java)
 
+    private var language = Language.EN
+
     val currencyBanksMapObservable: LiveData<Map<String, List<Bank>>> get() = _currencyBanksMapObservable
     private val _currencyBanksMapObservable: MutableLiveData<Map<String, List<Bank>>> =
         MutableLiveData()
@@ -30,20 +33,31 @@ class ViewModel(appContainer: AppContainer) : AppViewModel(appContainer) {
     val currencyBanksMap get(): Map<String, List<Bank>> = _currencyBanksMap
     private lateinit var _currencyBanksMap: Map<String, List<Bank>>
 
-    val currencies get(): List<String> = _currencies
-    private lateinit var _currencies: List<String>
+    val isCash get(): Boolean = _isCash
+    private var _isCash: Boolean = false
 
 
     fun loadBanks() {
         viewModelScope.launch(Dispatchers.IO) {
-            val banks = repoBankRates.getBankRates()
-
-            _currencies = banks.flatMap { it.rateInfo.currencyRates.keys }.distinct()
-            _currencyBanksMap = _currencies.associateWith { currency ->
+            val banks = repoBankRates.getBankRates(language)
+            val currencies = banks.flatMap { it.rateInfo.currencyRates.keys }.distinct()
+            _currencyBanksMap = currencies.associateWith { currency ->
                 banks.filter { bank -> bank.rateInfo.currencyRates.contains(currency) }
             }
 
             _currencyBanksMapObservable.postValue(_currencyBanksMap)
         }
+    }
+
+
+    fun setLanguage(language: Language) {
+        this.language = language
+        loadBanks()
+    }
+
+
+    fun toggleIsCash() {
+        _isCash = !isCash
+        _currencyBanksMapObservable.value = _currencyBanksMap
     }
 }

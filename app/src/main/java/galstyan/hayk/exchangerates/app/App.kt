@@ -26,14 +26,12 @@ class App : Application() {
         )
     )
 
-    enum class ApiLang { EN }
-
-    private val lang = ApiLang.EN
-
 
     private val appContainer = AppContainerImpl(
         repositories = mapOf(
-            BankRatesRepository::class.java to BankRatesRemoteRepositoryImpl(lang, jsonSerializer),
+            BankRatesRepository::class.java to BankRatesRemoteRepositoryImpl(
+                jsonSerializer
+            ),
             BranchRepository::class.java to BranchLocalRepositoryImpl()
         )
     )

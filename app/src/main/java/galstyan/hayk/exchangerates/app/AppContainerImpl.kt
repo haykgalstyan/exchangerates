@@ -1,6 +1,6 @@
 package galstyan.hayk.exchangerates.app
 
-import galstyan.hayk.exchangerates.model.AppContainer
+import galstyan.hayk.exchangerates.domain.AppContainer
 import galstyan.hayk.exchangerates.repository.Repository
 
 

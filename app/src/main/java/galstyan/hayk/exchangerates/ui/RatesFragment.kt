@@ -1,9 +1,7 @@
 package galstyan.hayk.exchangerates.ui
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.ImageView
 import android.widget.TextView
 
@@ -18,7 +16,8 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.android.material.tabs.TabLayoutMediator.TabConfigurationStrategy
 import galstyan.hayk.exchangerates.R
-import galstyan.hayk.exchangerates.model.Bank
+import galstyan.hayk.exchangerates.domain.Bank
+import galstyan.hayk.exchangerates.domain.Language
 import kotlinx.android.synthetic.main.fragment_rates.*
 
 
@@ -39,7 +38,21 @@ class RatesFragment(viewModelFactory: ViewModelProvider.Factory) :
     }
 
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.action_language_en -> viewModel.setLanguage(Language.EN)
+            R.id.action_language_am -> viewModel.setLanguage(Language.AM)
+            R.id.action_toggle_cash -> viewModel.toggleIsCash()
+        }
+        return true
+    }
+
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        toolbar.setOnMenuItemClickListener {
+            onOptionsItemSelected(it)
+        }
+
         refresh.setOnRefreshListener {
             viewModel.loadBanks()
             refresh.isRefreshing = false
@@ -77,12 +90,11 @@ class RatesFragment(viewModelFactory: ViewModelProvider.Factory) :
             val recycler: RecyclerView by lazy { itemView.findViewById<RecyclerView>(R.id.recycler) }
 
             override fun bind() {
-//                val currency = viewModel.currencies[adapterPosition]
+                @Suppress("UNCHECKED_CAST")
+                val adapter = recycler.adapter as ListAdapter<Bank, *>
                 val currency = currentList[adapterPosition]
                 val map = viewModel.currencyBanksMap
 
-                @Suppress("UNCHECKED_CAST")
-                val adapter = recycler.adapter as ListAdapter<Bank, *>
                 recycler.tag = currency
                 adapter.submitList(map[currency])
             }
@@ -118,12 +130,17 @@ class RatesFragment(viewModelFactory: ViewModelProvider.Factory) :
                 val rates = bank.rateInfo.currencyRates[currency]
 
                 title.text = bank.title
-                buy.text = rates?.rateCash?.buy.toString()
-                sell.text = rates?.rateCash?.buy.toString()
-
-                // todo: add cash no cash to item ui
-
                 imageLoader.load(bank.image).into(image)
+
+                println("Rates $rates")
+
+                (if (viewModel.isCash) rates?.rateCash else rates?.rateNonCash).let {
+                    buy.text = it?.buy.toString()
+                    sell.text = it?.sell.toString()
+                }
+
+                // fixme: differ does not recognise any change because rates stay the same
+                // either have only one rate here or pass a payload or whatever
             }
         }
     }

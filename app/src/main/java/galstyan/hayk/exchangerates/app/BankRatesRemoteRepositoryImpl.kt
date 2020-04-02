@@ -2,10 +2,7 @@ package galstyan.hayk.exchangerates.app
 
 import android.annotation.SuppressLint
 import android.net.Uri
-import galstyan.hayk.exchangerates.model.Bank
-import galstyan.hayk.exchangerates.model.Rates
-import galstyan.hayk.exchangerates.model.Rate
-import galstyan.hayk.exchangerates.model.RateInfo
+import galstyan.hayk.exchangerates.domain.*
 import galstyan.hayk.exchangerates.repository.BankRatesRepository
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
@@ -27,7 +24,6 @@ private const val KEY_QUERY_LANG = "lang"
  * Using mix of custom deserialization because of the horrible json... sorry :D
  */
 class BankRatesRemoteRepositoryImpl(
-    private val lang: App.ApiLang,
     private val json: Json
 ) : BankRatesRepository() {
 
@@ -38,11 +34,11 @@ class BankRatesRemoteRepositoryImpl(
     data class RateModel(val buy: Double, val sell: Double)
 
 
-    override suspend fun getBankRates(): List<Bank> {
+    override suspend fun getBankRates(language: Language): List<Bank> {
         @SuppressLint("DefaultLocale") // seems like a lint bug
         val url = Uri.parse(API)
             .buildUpon()
-            .appendQueryParameter(KEY_QUERY_LANG, lang.name.toLowerCase())
+            .appendQueryParameter(KEY_QUERY_LANG, language.name.toLowerCase())
             .toString()
 
         val response = URL(url).readText()

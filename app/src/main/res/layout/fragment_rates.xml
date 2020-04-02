@@ -1,22 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+<LinearLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
 	xmlns:tools="http://schemas.android.com/tools"
-	android:id="@+id/refresh"
 	android:layout_width="match_parent"
-	android:layout_height="match_parent">
+	android:layout_height="match_parent"
+	android:orientation="vertical">
 
-	<LinearLayout
+	<com.google.android.material.appbar.MaterialToolbar
+		android:id="@+id/toolbar"
 		android:layout_width="match_parent"
-		android:layout_height="match_parent"
-		android:orientation="vertical">
+		android:layout_height="?attr/actionBarSize"
+		android:background="?attr/colorPrimary"
+		android:elevation="4dp"
+		app:menu="@menu/menu_toolbar" />
 
-		<com.google.android.material.tabs.TabLayout
-			android:id="@+id/tabs"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			app:tabMode="scrollable" />
+	<com.google.android.material.tabs.TabLayout
+		android:id="@+id/tabs"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		app:tabMode="scrollable" />
+
+	<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+		android:id="@+id/refresh"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content">
 
 		<androidx.viewpager2.widget.ViewPager2
 			android:id="@+id/pager"
@@ -24,7 +32,6 @@
 			android:layout_height="match_parent"
 			tools:listitem="@layout/rate_list" />
 
-	</LinearLayout>
+	</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-
-</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+</LinearLayout>
