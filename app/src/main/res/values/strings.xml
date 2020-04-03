@@ -5,4 +5,7 @@
 	<string name="action_language_en">English</string>
 	<string name="action_language_am">Հայերեն</string>
 
+	<!-- TODO: Remove or change this placeholder text -->
+	<string name="hello_blank_fragment">Hello blank fragment</string>
+
 </resources>

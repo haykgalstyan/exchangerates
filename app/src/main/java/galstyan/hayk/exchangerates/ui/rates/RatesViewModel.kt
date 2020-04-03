@@ -1,4 +1,4 @@
-package galstyan.hayk.exchangerates.ui
+package galstyan.hayk.exchangerates.ui.rates
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -8,8 +8,15 @@ import galstyan.hayk.exchangerates.domain.Bank
 import galstyan.hayk.exchangerates.domain.Language
 import galstyan.hayk.exchangerates.repository.BranchRepository
 import galstyan.hayk.exchangerates.repository.BankRatesRepository
+import galstyan.hayk.exchangerates.ui.AppViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+
+
+/**
+ * In case other actions are needed for other types of payloads later
+ */
+const val PAYLOADS_RATE_TYPE = 1
 
 
 /**
@@ -17,14 +24,10 @@ import kotlinx.coroutines.launch
  * currency -> Banks (Can retrieve rates from bank fast by currency key)
  * View model shall expose data convenient for the view, so the mapping is done here
  *
- * backing fields are for encapsulating [MutableLiveData] or mutable variables
+ * Backing fields are for encapsulating [MutableLiveData] or mutable variables
  */
-
-const val PAYLOADS_RATE_TYPE = 1
-
 class ViewModel(appContainer: AppContainer) : AppViewModel(appContainer) {
     private val repoBankRates = appContainer.getRepository(BankRatesRepository::class.java)
-    private val repoBranches = appContainer.getRepository(BranchRepository::class.java)
 
     private var language = Language.EN
 
@@ -57,7 +60,6 @@ class ViewModel(appContainer: AppContainer) : AppViewModel(appContainer) {
             _currencyBanksMap = currencies.associateWith { currency ->
                 banks.filter { bank -> bank.rateInfo.currencyRates.contains(currency) }
             }
-
             _currencyBanksMapObservable.postValue(_currencyBanksMap)
         }
     }
@@ -72,6 +74,7 @@ class ViewModel(appContainer: AppContainer) : AppViewModel(appContainer) {
     fun toggleIsCash() {
         _isCash = !isCash
         _currencyBanksMapObservable.value = _currencyBanksMap
-        _onPayloadsChangedObservable.value = PAYLOADS_RATE_TYPE
+        _onPayloadsChangedObservable.value =
+            PAYLOADS_RATE_TYPE
     }
 }

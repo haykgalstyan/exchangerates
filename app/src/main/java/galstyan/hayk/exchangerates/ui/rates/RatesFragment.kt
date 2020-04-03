@@ -1,4 +1,4 @@
-package galstyan.hayk.exchangerates.ui
+package galstyan.hayk.exchangerates.ui.rates
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -19,6 +19,7 @@ import com.google.android.material.tabs.TabLayoutMediator.TabConfigurationStrate
 import galstyan.hayk.exchangerates.R
 import galstyan.hayk.exchangerates.domain.Bank
 import galstyan.hayk.exchangerates.domain.Language
+import galstyan.hayk.exchangerates.ui.*
 import kotlinx.android.synthetic.main.fragment_rates.*
 
 
@@ -142,18 +143,12 @@ class RatesFragment(
                 title.text = bank.title
                 imageLoader.load(bank.image).into(image)
 
-                println("Rates $currency $rates")
                 rates?.let {
                     (if (viewModel.isCash) rates.rateCash else rates.rateNonCash).let {
                         buy.text = it?.buy.toString()
                         sell.text = it?.sell.toString()
-
-                        println("Rate $currency  $it")
                     }
                 }
-
-                // fixme: differ does not recognise any change because rates stay the same
-                // either have only one rate here or pass a payload or whatever
             }
         }
     }
