@@ -1,4 +1,4 @@
-# exchangerates
+# Exchange rates
 Exchange rates client app in kotlin (android)
 
 Known issues
