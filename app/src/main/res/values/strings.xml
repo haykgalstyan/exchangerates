@@ -1,7 +1,8 @@
 <resources>
-    <string name="app_name">Exchange Rates</string>
+	<string name="app_name">Exchange Rates</string>
 	<string name="action_toggle_cash">Cash/Non-Cash</string>
 	<string name="action_language">Language</string>
 	<string name="action_language_en">English</string>
 	<string name="action_language_am">Հայերեն</string>
+
 </resources>

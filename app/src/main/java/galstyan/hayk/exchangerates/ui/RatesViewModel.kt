@@ -20,21 +20,34 @@ import kotlinx.coroutines.launch
  * backing fields are for encapsulating [MutableLiveData] or mutable variables
  */
 
+const val PAYLOADS_RATE_TYPE = 1
+
 class ViewModel(appContainer: AppContainer) : AppViewModel(appContainer) {
     private val repoBankRates = appContainer.getRepository(BankRatesRepository::class.java)
     private val repoBranches = appContainer.getRepository(BranchRepository::class.java)
 
     private var language = Language.EN
 
+
     val currencyBanksMapObservable: LiveData<Map<String, List<Bank>>> get() = _currencyBanksMapObservable
     private val _currencyBanksMapObservable: MutableLiveData<Map<String, List<Bank>>> =
         MutableLiveData()
 
+    /**
+     * View could have notified adapter directly of rate type change,
+     * But that would not work if rates were updated async here (for example from db)
+     * So notifying from here will prevent future bugs
+     */
+    val onPayloadsChangedObservable: LiveData<Int> get() = _onPayloadsChangedObservable
+    private val _onPayloadsChangedObservable: MutableLiveData<Int> = MutableLiveData()
+
+
     val currencyBanksMap get(): Map<String, List<Bank>> = _currencyBanksMap
     private lateinit var _currencyBanksMap: Map<String, List<Bank>>
 
+
     val isCash get(): Boolean = _isCash
-    private var _isCash: Boolean = false
+    private var _isCash: Boolean = true
 
 
     fun loadBanks() {
@@ -59,5 +72,6 @@ class ViewModel(appContainer: AppContainer) : AppViewModel(appContainer) {
     fun toggleIsCash() {
         _isCash = !isCash
         _currencyBanksMapObservable.value = _currencyBanksMap
+        _onPayloadsChangedObservable.value = PAYLOADS_RATE_TYPE
     }
 }

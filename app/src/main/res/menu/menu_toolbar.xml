@@ -3,15 +3,15 @@
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto">
 
+	<!-- state drawable is not supported, so changing programmatically -->
 	<item
 		android:id="@+id/action_toggle_cash"
-		android:icon="@drawable/ic_action_local_atm"
+		android:icon="@drawable/ic_action_rate_type"
 		android:title="@string/action_toggle_cash"
 		app:showAsAction="ifRoom" />
 
 	<group
-		android:id="@+id/action_language"
-		android:checkableBehavior="single">
+		android:id="@+id/action_language">
 		<item
 			android:id="@+id/action_language_en"
 			android:title="@string/action_language_en"

@@ -1,17 +1,18 @@
 package galstyan.hayk.exchangerates.ui
 
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.android.material.tabs.TabLayoutMediator.TabConfigurationStrategy
@@ -21,8 +22,10 @@ import galstyan.hayk.exchangerates.domain.Language
 import kotlinx.android.synthetic.main.fragment_rates.*
 
 
-class RatesFragment(viewModelFactory: ViewModelProvider.Factory) :
-    AppBaseFragment(viewModelFactory) {
+class RatesFragment(
+    viewModelFactory: ViewModelProvider.Factory
+) : AppBaseFragment(viewModelFactory) {
+
 
     private val viewModel by viewModels<ViewModel> { viewModelFactory }
 
@@ -42,7 +45,11 @@ class RatesFragment(viewModelFactory: ViewModelProvider.Factory) :
         when (item.itemId) {
             R.id.action_language_en -> viewModel.setLanguage(Language.EN)
             R.id.action_language_am -> viewModel.setLanguage(Language.AM)
-            R.id.action_toggle_cash -> viewModel.toggleIsCash()
+            R.id.action_toggle_cash -> {
+                item.isChecked = !item.isChecked
+                item.setIcon(if (item.isChecked) R.drawable.ic_action_card else R.drawable.ic_action_cash)
+                viewModel.toggleIsCash()
+            }
         }
         return true
     }
@@ -110,6 +117,9 @@ class RatesFragment(viewModelFactory: ViewModelProvider.Factory) :
 
         override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
             recycler = recyclerView
+            viewModel.onPayloadsChangedObservable.observe(viewLifecycleOwner, Observer {
+                notifyItemRangeChanged(0, currentList.size, it)
+            })
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BoundViewHolder {
@@ -132,11 +142,14 @@ class RatesFragment(viewModelFactory: ViewModelProvider.Factory) :
                 title.text = bank.title
                 imageLoader.load(bank.image).into(image)
 
-                println("Rates $rates")
+                println("Rates $currency $rates")
+                rates?.let {
+                    (if (viewModel.isCash) rates.rateCash else rates.rateNonCash).let {
+                        buy.text = it?.buy.toString()
+                        sell.text = it?.sell.toString()
 
-                (if (viewModel.isCash) rates?.rateCash else rates?.rateNonCash).let {
-                    buy.text = it?.buy.toString()
-                    sell.text = it?.sell.toString()
+                        println("Rate $currency  $it")
+                    }
                 }
 
                 // fixme: differ does not recognise any change because rates stay the same
