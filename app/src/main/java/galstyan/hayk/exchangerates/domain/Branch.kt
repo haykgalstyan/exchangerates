@@ -6,7 +6,7 @@ data class Branch(
     val title: String,
     val address: String,
     val location: Location,
-    val contact: String
-    // is main branch will probably decided outside
+    val contact: String,
+    val isHead: Boolean
     // todo: work hours (if there is time)
 )

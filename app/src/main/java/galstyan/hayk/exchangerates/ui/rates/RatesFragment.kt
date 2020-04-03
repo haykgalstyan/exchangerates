@@ -20,6 +20,7 @@ import galstyan.hayk.exchangerates.R
 import galstyan.hayk.exchangerates.domain.Bank
 import galstyan.hayk.exchangerates.domain.Language
 import galstyan.hayk.exchangerates.ui.*
+import galstyan.hayk.exchangerates.ui.bank.BankFragment
 import kotlinx.android.synthetic.main.fragment_rates.*
 
 
@@ -28,9 +29,27 @@ class RatesFragment(
 ) : AppBaseFragment(viewModelFactory) {
 
 
+    // There is a bug of this view being destroyed and recreating after back-stack
+    // But I don't have more time to look into it, sorry ))
+
+
     private val viewModel by viewModels<ViewModel> { viewModelFactory }
 
     private val imageLoader = ImageLoaderProvider().imageLoader
+
+
+    interface OnListItemClickListener<T> {
+        fun onListItemClick(obj: T)
+    }
+
+
+    val onBankClickListener: OnListItemClickListener<Bank> =
+        object : OnListItemClickListener<Bank> {
+            override fun onListItemClick(obj: Bank) {
+                getAppActivity().getNavigation()
+                    .push(BankFragment.newInstance(obj.id, viewModelFactory))
+            }
+        }
 
 
     override fun onCreateView(
@@ -57,6 +76,8 @@ class RatesFragment(
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        if (savedInstanceState != null) return
+
         toolbar.setOnMenuItemClickListener {
             onOptionsItemSelected(it)
         }
@@ -129,11 +150,15 @@ class RatesFragment(
 
         inner class BankRateHolder(
             itemView: View
-        ) : BoundViewHolder(itemView) {
+        ) : BoundViewHolder(itemView), View.OnClickListener {
             private val title: TextView by lazy { itemView.findViewById<TextView>(R.id.item_rate_text_title) }
             private val buy: TextView by lazy { itemView.findViewById<TextView>(R.id.item_rate_text_rate_buy) }
             private val sell: TextView by lazy { itemView.findViewById<TextView>(R.id.item_rate_text_rate_sell) }
             private val image: ImageView by lazy { itemView.findViewById<ImageView>(R.id.item_rate_image) }
+
+            init {
+                itemView.setOnClickListener(this)
+            }
 
             override fun bind() {
                 val bank = currentList[adapterPosition]
@@ -149,6 +174,10 @@ class RatesFragment(
                         sell.text = it?.sell.toString()
                     }
                 }
+            }
+
+            override fun onClick(v: View?) {
+                onBankClickListener.onListItemClick(currentList[adapterPosition])
             }
         }
     }

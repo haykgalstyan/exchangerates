@@ -15,6 +15,7 @@ import kotlinx.coroutines.launch
 class BankViewModel(appContainer: AppContainer) : AppViewModel(appContainer) {
     private val repoBranches = appContainer.getRepository(BranchRepository::class.java)
 
+    // this should be stored somewhere global, but I have no more time, sorry
     private var language = Language.EN
 
 
@@ -23,12 +24,14 @@ class BankViewModel(appContainer: AppContainer) : AppViewModel(appContainer) {
         MutableLiveData()
 
 
+    val branches: List<Branch> get() = _branches
+    private var _branches: List<Branch> = listOf()
+
+
     fun loadBranches(id: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            val branches = repoBranches.getBranchesOf(id, language)
-
-            _bankBranchesObservable.postValue(branches)
+            _branches = repoBranches.getBranchesOf(id, language)
+            _bankBranchesObservable.postValue(_branches)
         }
     }
-
 }

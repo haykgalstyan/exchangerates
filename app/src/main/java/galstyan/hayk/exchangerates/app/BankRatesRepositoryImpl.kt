@@ -21,7 +21,8 @@ private const val KEY_QUERY_LANG = "lang"
 
 /**
  * rate.am API Rates implementation
- * Using mix of custom deserialization because of the horrible json... sorry :D
+ * Using mix of custom deserialization since dynamic keys are not supported
+ * by the most serialization libraries
  */
 class BankRatesRemoteRepositoryImpl(
     private val json: Json

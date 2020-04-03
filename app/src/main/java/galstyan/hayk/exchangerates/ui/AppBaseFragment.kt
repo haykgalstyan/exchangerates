@@ -6,7 +6,10 @@ import androidx.lifecycle.ViewModelProvider
 
 abstract class AppBaseFragment(
     protected val viewModelFactory: ViewModelProvider.Factory
-) : Fragment()
+) : Fragment() {
+
+    protected fun getAppActivity(): AppActivity = activity as AppActivity
+}
 
 
 

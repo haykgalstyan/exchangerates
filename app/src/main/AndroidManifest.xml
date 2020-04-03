@@ -18,7 +18,7 @@
 		android:usesCleartextTraffic="true"
 		tools:ignore="UnusedAttribute">
 
-		<activity android:name=".app.AppActivity">
+		<activity android:name=".app.AppActivityImpl">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
 

@@ -29,6 +29,7 @@ const val PAYLOADS_RATE_TYPE = 1
 class ViewModel(appContainer: AppContainer) : AppViewModel(appContainer) {
     private val repoBankRates = appContainer.getRepository(BankRatesRepository::class.java)
 
+    // this should be stored somewhere global, but I have no more time, sorry
     private var language = Language.EN
 
 
